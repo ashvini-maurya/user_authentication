@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
@@ -10,22 +9,20 @@ from datetime import datetime
 
 
 def index(request):
-
     reset_last_access_t = False
     response = render(request, 'authenticate/index.html', {})
-    if 'last_access' in request.COOKIES:
-        last_access = request.COOKIES['last_access']
-        #last_access_t = datetime.strptime(last_access[:-7], "%Y-%m-%d %H:%M:%S")
-        # print last_access_t
-        #
-        # if last_access_t > 0:
-        #     reset_last_access_t = True
+    if 'last_access_t' in request.COOKIES:
+        last_access = request.COOKIES['last_access_t']
+
     else:
         reset_last_access_t = True
         response = render(request, 'authenticate/index.html', {})
 
+
     if reset_last_access_t:
-        response.set_cookie('last_access', reset_last_access_t)
+        value = datetime.now()
+        print value
+        response.set_cookie('last_access_t', value)
 
     return response
 
